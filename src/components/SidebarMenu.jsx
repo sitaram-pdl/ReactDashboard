@@ -1,21 +1,24 @@
 import { SidebarContext } from '@/context/SidebarContext';
 import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronRight, IceCream } from 'lucide-react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 function SidebarMenu({ menuItem }) {
   const location = useLocation();
 
-  console.log(decodeURIComponent(location.pathname).slice(1));
-
-  const [selectedMenu, setSelectedMenu] = useState(
-    decodeURIComponent(location?.pathname)?.slice(1) || ''
-  );
+  const [selectedMenu, setSelectedMenu] = useState('');
   const { isSidebarOpen } = useContext(SidebarContext);
   const navigate = useNavigate();
-  const [selectedSubMenu, setSelectedSubMenu] = useState('Profile');
+  const [selectedSubMenu, setSelectedSubMenu] = useState('');
+
+  useEffect(() => {
+    navigate(decodeURIComponent(location?.pathname)?.slice(1) || 'Profile');
+    setSelectedMenu(
+      decodeURIComponent(location?.pathname)?.slice(1) || 'Profile'
+    );
+  }, []);
 
   return (
     <div className=' flex flex-col mt-7 '>
