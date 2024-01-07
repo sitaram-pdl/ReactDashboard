@@ -9,10 +9,10 @@ function Notice() {
   ];
 
   return (
-    <div className='flex flex-wrap justify-around pt-7'>
+    <div className='flex  gap-2 flex-wrap justify-around pt-7'>
       {dataArray.map((item, i) => (
         <div
-          className='flex flex-col w-[24%] p-5  items-start border-[#13f287] border-[1px] border-b-4 rounded-lg'
+          className='flex flex-col   md:w-[24%] w-[48%] p-5  items-start border-[#13f287] border-[1px] border-b-4 rounded-lg'
           key={i}
           style={{
             backgroundImage:

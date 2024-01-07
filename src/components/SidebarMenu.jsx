@@ -1,42 +1,95 @@
 import { SidebarContext } from '@/context/SidebarContext';
 import { cn } from '@/lib/utils';
-import { IceCream } from 'lucide-react';
+import { ChevronDown, ChevronRight, IceCream } from 'lucide-react';
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from './ui/tooltip';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 function SidebarMenu({ menuItem }) {
-  const [selectedMenu, setSelectedMenu] = useState('Profile');
-  const { isSidebarOpen, toggleSidebar } = useContext(SidebarContext);
+  const location = useLocation();
+
+  console.log(decodeURIComponent(location.pathname).slice(1));
+
+  const [selectedMenu, setSelectedMenu] = useState(
+    decodeURIComponent(location?.pathname)?.slice(1) || ''
+  );
+  const { isSidebarOpen } = useContext(SidebarContext);
   const navigate = useNavigate();
+  const [selectedSubMenu, setSelectedSubMenu] = useState('Profile');
 
   return (
-    <div className='mt-4 flex flex-col '>
+    <div className=' flex flex-col '>
       {menuItem.map((item, i) => (
-        <SingleMenu
-          onnClick={() => {
-            setSelectedMenu(item.text);
-            navigate(item.text);
-          }}
-          selected={item.text === selectedMenu}
-          key={i}
-          className='flex  items-center gap-2'
-        >
-          {!!isSidebarOpen && (
-            <Tooltip>
-              <TooltipTrigger>{item?.icon}</TooltipTrigger>
-              <TooltipContent>{item.text}</TooltipContent>
-            </Tooltip>
-          )}
-          {!isSidebarOpen && item?.icon}
-          {isSidebarOpen && item.text}
-          {/* {menuItem.subMenu && 'v'} */}
-        </SingleMenu>
+        <>
+          <SingleMenu
+            onnClick={() => {
+              !item.subMenu && setSelectedMenu(item.text);
+              item.subMenu &&
+                setSelectedMenu(item.text === selectedMenu ? '' : item.text);
+              !item.subMenu && navigate(item.text);
+            }}
+            selected={item.text === selectedMenu}
+            key={i}
+            setSelectedSubMenu={setSelectedSubMenu}
+            selectedSubMenu={selectedSubMenu}
+            className={cn(
+              'flex items-center gap-2',
+              item.text === selectedMenu && 'text-green-500'
+            )}
+          >
+            {!isSidebarOpen && (
+              <Tooltip>
+                <TooltipTrigger>{item?.icon}</TooltipTrigger>
+                <TooltipContent>{item.text}</TooltipContent>
+              </Tooltip>
+            )}
+
+            {isSidebarOpen && item?.icon}
+
+            {isSidebarOpen && item.text}
+
+            {item.subMenu && (
+              <ChevronDown
+                size={!isSidebarOpen ? 15 : 19}
+                className={cn(
+                  'absolute right-0 top-2 ',
+                  item.text === selectedMenu && '-rotate-180',
+                  isSidebarOpen ? 'right-2 top-2' : ''
+                )}
+              />
+            )}
+            {/* {menuItem.subMenu && 'v'} */}
+          </SingleMenu>
+          <div>
+            {item.subMenu &&
+              selectedMenu === item.text &&
+              item.subMenu.map((subMenuItem, key) => (
+                <SingleMenu
+                  onnClick={() => {
+                    setSelectedMenu(item.text);
+                    navigate(subMenuItem.text);
+                    setSelectedSubMenu(subMenuItem.text);
+                  }}
+                  selected={subMenuItem.text === selectedSubMenu}
+                  key={key}
+                  className={cn(
+                    'flex items-center gap-2',
+                    subMenuItem.text === selectedSubMenu && 'text-green-500'
+                  )}
+                  isSubMenu={!!item.subMenu}
+                >
+                  {!isSidebarOpen && (
+                    <Tooltip>
+                      <TooltipTrigger>{subMenuItem?.icon}</TooltipTrigger>
+                      <TooltipContent>{subMenuItem.text}</TooltipContent>
+                    </Tooltip>
+                  )}
+                  {isSidebarOpen && item?.icon}
+                  {isSidebarOpen && subMenuItem.text}
+                </SingleMenu>
+              ))}
+          </div>
+        </>
       ))}
     </div>
   );
@@ -44,7 +97,7 @@ function SidebarMenu({ menuItem }) {
 
 export default SidebarMenu;
 
-const SingleMenu = ({ children, selected, onnClick, className }) => {
+const SingleMenu = ({ children, selected, onnClick, className, isSubMenu }) => {
   const [hover, setHover] = useState(false);
 
   const { isSidebarOpen } = useContext(SidebarContext);
@@ -55,8 +108,11 @@ const SingleMenu = ({ children, selected, onnClick, className }) => {
       onMouseLeave={() => setHover(false)}
       onClick={onnClick}
       className={cn(
-        ' py-2 flex cursor-pointer  gap-2 text-white/70 relative',
+        ' py-2 flex cursor-pointer   gap-2 text-white/70 relative  animatefadeInOut',
         isSidebarOpen ? 'pl-9' : 'pl-7',
+        isSubMenu ? 'pl-11' : '',
+        !isSidebarOpen && isSubMenu && 'pl-8',
+
         className
       )}
       style={{

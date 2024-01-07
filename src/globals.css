@@ -61,3 +61,17 @@
   transition-duration: 300ms;
   transition-timing-function: ease-in-out;
 }
+
+.animatefadeInOut {
+  animation: fadeInOut 0.5s ease-in-out;
+  /* Adjust the duration (1s) and timing function (ease-in-out) as needed */
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+  }
+}

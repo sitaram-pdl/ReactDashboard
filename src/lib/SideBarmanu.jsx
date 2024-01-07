@@ -5,6 +5,7 @@ import {
   PenTool,
   ReplyIcon,
   Settings2,
+  TvIcon,
   User,
 } from 'lucide-react';
 
@@ -27,15 +28,19 @@ export const sidebarMenu = [
     subMenu: [
       {
         text: 'Sub Menu 1',
+        icon: <TvIcon size={15} />,
       },
       {
         text: 'Sub Menu 2',
+        icon: <TvIcon size={15} />,
       },
       {
         text: 'Sub Menu 3',
+        icon: <TvIcon size={15} />,
       },
       {
         text: 'Sub Menu 4',
+        icon: <TvIcon size={15} />,
       },
     ],
   },
