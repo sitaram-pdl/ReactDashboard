@@ -18,7 +18,7 @@ function SidebarMenu({ menuItem }) {
   const [selectedSubMenu, setSelectedSubMenu] = useState('Profile');
 
   return (
-    <div className=' flex flex-col '>
+    <div className=' flex flex-col mt-7 '>
       {menuItem.map((item, i) => (
         <>
           <SingleMenu

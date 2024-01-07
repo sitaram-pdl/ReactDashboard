@@ -21,7 +21,7 @@ const Sidebar = () => {
       <div className='flex justify-center w-full '>
         <img
           onClick={() => toggleSidebar()}
-          className='h-12 w-fit cursor-pointer'
+          className='h-12 w-fit cursor-pointer mt-5'
           src={!isSidebarOpen ? SmallLogo : largeLogo}
         />
       </div>
